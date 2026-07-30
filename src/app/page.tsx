@@ -114,60 +114,49 @@ export default async function HomePage() {
       )}
 
       {/* ── CATEGORY BANDS ── */}
-      {/* Cats */}
-      <section style={{ background: "var(--color-emerald)" }} className="cat-band">
-        <div style={{ maxWidth: 1160, margin: "0 auto", width: "100%", padding: "0 1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem" }}>
-          <div>
-            <span className="kicker kicker--light">CATS</span>
-            <h2 style={{ color: "var(--color-cream)", fontSize: "clamp(1.75rem, 4vw, 2.75rem)", marginBottom: "1rem" }}>
-              Kittens of exceptional character.
-            </h2>
-            <p style={{ color: "rgba(245,245,220,0.65)", marginBottom: "1.75rem", lineHeight: 1.7 }}>
-              From regal Persians to elegant British Shorthairs — our cats are socialised from birth for a life of deep companionship.
-            </p>
-            <Link href="/pets?category=cat" className="btn btn-gold">Shop Cats</Link>
-          </div>
-          <div style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "4/3", background: "linear-gradient(135deg, rgba(255,193,7,0.2), rgba(150,115,26,0.3))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: "6rem" }}>🐱</span>
-          </div>
-        </div>
-      </section>
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="container">
 
-      {/* Birds */}
-      <section style={{ background: "var(--color-ink)" }} className="cat-band">
-        <div style={{ maxWidth: 1160, margin: "0 auto", width: "100%", padding: "0 1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem" }}>
-          <div style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "4/3", background: "linear-gradient(135deg, rgba(255,193,7,0.12), rgba(19,46,39,0.5))", display: "flex", alignItems: "center", justifyContent: "center", order: -1 }}>
-            <span style={{ fontSize: "6rem" }}>🦜</span>
+          {/* Cats */}
+          <div className="cat-band">
+            <div className="cat-txt">
+              <span className="kicker">Cats</span>
+              <h3>Rare breeds, <em>raised with love.</em></h3>
+              <p>Persians, Bengals and Maine Coons — socialised from birth, vaccinated, and paired with a lifetime care plan.</p>
+              <Link href="/pets?category=cat" className="btn btn-gold">Browse Cats <span>→</span></Link>
+            </div>
+            <div className="cat-vis">
+              <span className="big">Cats</span>
+            </div>
           </div>
-          <div>
-            <span className="kicker kicker--light">BIRDS</span>
-            <h2 style={{ color: "var(--color-cream)", fontSize: "clamp(1.75rem, 4vw, 2.75rem)", marginBottom: "1rem" }}>
-              Parrots that become family.
-            </h2>
-            <p style={{ color: "rgba(245,245,220,0.65)", marginBottom: "1.75rem", lineHeight: 1.7 }}>
-              Hand-fed African Greys, Macaws, and Cockatiels that bond deeply. Our birds arrive tame, talking, and ready to fill your home with personality.
-            </p>
-            <Link href="/pets?category=bird" className="btn btn-gold">Shop Birds</Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Reptiles */}
-      <section style={{ background: "var(--color-emerald-deep)" }} className="cat-band">
-        <div style={{ maxWidth: 1160, margin: "0 auto", width: "100%", padding: "0 1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem" }}>
-          <div>
-            <span className="kicker kicker--light">REPTILES</span>
-            <h2 style={{ color: "var(--color-cream)", fontSize: "clamp(1.75rem, 4vw, 2.75rem)", marginBottom: "1rem" }}>
-              Exotics with personality.
-            </h2>
-            <p style={{ color: "rgba(245,245,220,0.65)", marginBottom: "1.75rem", lineHeight: 1.7 }}>
-              Captive-bred Ball Pythons, Leopard Geckos, and more. Every reptile is feeding well, freshly shed, and ready for their forever enclosure.
-            </p>
-            <Link href="/pets?category=reptile" className="btn btn-gold">Shop Reptiles</Link>
+          {/* Birds */}
+          <div className="cat-band alt flip">
+            <div className="cat-txt">
+              <span className="kicker">Birds</span>
+              <h3>Companions that <em>talk back.</em></h3>
+              <p>Hand-raised African greys, macaws and cockatoos — DNA-sexed, tame and ready to bond.</p>
+              <Link href="/pets?category=bird" className="btn btn-gold">Browse Birds <span>→</span></Link>
+            </div>
+            <div className="cat-vis">
+              <span className="big">Birds</span>
+            </div>
           </div>
-          <div style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "4/3", background: "linear-gradient(135deg, rgba(255,193,7,0.15), rgba(10,30,25,0.5))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: "6rem" }}>🦎</span>
+
+          {/* Reptiles */}
+          <div className="cat-band">
+            <div className="cat-txt">
+              <span className="kicker">Reptiles</span>
+              <h3>The collection <em>expands soon.</em></h3>
+              <p>Ball python morphs, geckos and more — join the waitlist to be first in line when the reptile house opens.</p>
+              <Link href="/pets?category=reptile" className="btn btn-ghost" style={{ borderColor: "rgba(245,245,220,0.4)", color: "var(--color-cream)" }}>See Reptiles</Link>
+            </div>
+            <div className="cat-vis">
+              <span className="big">Soon</span>
+              <span className="soon">Coming 2026</span>
+            </div>
           </div>
+
         </div>
       </section>
 
