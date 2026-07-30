@@ -4,6 +4,7 @@ import PetCard from "@/components/PetCard";
 import FaqAccordion from "@/components/FaqAccordion";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { FEATURED_PETS_QUERY, TESTIMONIALS_QUERY, FEATURED_GUIDES_QUERY, FAQS_QUERY, SITE_SETTINGS_QUERY } from "@/lib/queries";
+import { getFaqGroups } from "@/lib/faqs";
 import type { SanityImageSource } from "@sanity/image-url";
 
 export const metadata: Metadata = {
@@ -191,21 +192,24 @@ export default async function HomePage() {
       )}
 
       {/* ─────────── FAQ ─────────── */}
-      {faqs.length > 0 && (
-        <section className="sec" style={{ paddingTop: 0 }}>
-          <div className="wrap">
-            <div className="sec-head" style={{ justifyContent: "center", textAlign: "center" }}>
-              <div className="reveal" style={{ margin: "0 auto" }}>
-                <div className="kicker center">FAQ</div>
-                <h2 className="sec-title">Questions, <em>answered.</em></h2>
-              </div>
-            </div>
-            <div className="faq-wrap">
-              <FaqAccordion items={faqs.slice(0, 8)} />
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="sec-head" style={{ justifyContent: "center", textAlign: "center" }}>
+            <div className="reveal" style={{ margin: "0 auto" }}>
+              <div className="kicker center">FAQ</div>
+              <h2 className="sec-title">Questions, <em>answered.</em></h2>
             </div>
           </div>
-        </section>
-      )}
+          <div className="faq-wrap">
+            {getFaqGroups(faqs).map((g) => (
+              <div key={g.category} className="faq-cat">
+                <h4>{g.category}</h4>
+                <FaqAccordion items={g.items} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ─────────── JSON-LD ─────────── */}
       <script
