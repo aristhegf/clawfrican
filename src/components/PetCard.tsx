@@ -20,7 +20,7 @@ type Pet = {
 
 export default function PetCard({ pet }: { pet: Pet }) {
   const slug = nameToSlug(pet.name);
-  const imgUrl = pet.photo ? urlFor(pet.photo).width(600).height(600).url() : null;
+  const imgUrl = pet.photo ? urlFor(pet.photo).width(600).height(660).url() : null;
 
   return (
     <Link href={`/pets/${slug}`} className="pet-card">
@@ -28,28 +28,29 @@ export default function PetCard({ pet }: { pet: Pet }) {
         {imgUrl ? (
           <Image src={imgUrl} alt={pet.name} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover" />
         ) : (
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #132e27, #96731a)" }} />
+          <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 300, fontSize: "5rem", color: "rgba(255,193,7,0.2)" }}>
+            {pet.category === "cat" ? "🐱" : pet.category === "bird" ? "🦜" : "🦎"}
+          </span>
         )}
-        <span className={`badge badge--${pet.status}`}>
+
+        <span className="badge">
+          <span className={`badge__dot badge__dot--${pet.status}`} />
           {statusLabel(pet.status)}
         </span>
-        {pet.staffPick && <span className="badge-staff-pick">⭐ Staff Pick</span>}
+
+        {pet.staffPick && <span className="badge-staff-pick">Staff Pick</span>}
       </div>
 
       <div className="pet-card__body">
         <p className="pet-card__name">{pet.name}</p>
         <p className="pet-card__breed">
-          {[pet.breed, pet.colour].filter(Boolean).join(" · ")}
-          {pet.age && <> · {pet.age}</>}
+          {[pet.breed, pet.colour, pet.age].filter(Boolean).join(" · ")}
         </p>
-        {pet.tags && pet.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {pet.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="pill" style={{ fontSize: "0.688rem" }}>{tag}</span>
-            ))}
-          </div>
-        )}
-        <p className="pet-card__price">{pet.price || "Price on enquiry"}</p>
+
+        <div className="pet-card__footer">
+          <p className="pet-card__price">{pet.price || "Price on enquiry"}</p>
+          <span className="pet-card__go">View →</span>
+        </div>
       </div>
     </Link>
   );

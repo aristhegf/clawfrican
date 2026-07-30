@@ -22,7 +22,7 @@ export default function Nav({ wa }: { wa: string }) {
 
   const isTransparent = onHero && !scrolled;
 
-  const linkCls = `text-sm font-semibold tracking-wide transition-opacity hover:opacity-70 ${
+  const linkCls = `transition-opacity hover:opacity-100 ${
     isTransparent ? "text-cream" : "text-ink"
   }`;
 
@@ -48,15 +48,15 @@ export default function Nav({ wa }: { wa: string }) {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="/pets" className={linkCls}>Pets</Link>
-            <Link href="/guides" className={linkCls}>Guides</Link>
-            <Link href="/about" className={linkCls}>About</Link>
+          <nav className="hidden md:flex items-center gap-8" style={{ fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 600 }}>
+            <Link href="/pets" className={linkCls} style={{ opacity: 0.66 }}>Pets</Link>
+            <Link href="/guides" className={linkCls} style={{ opacity: 0.66 }}>Guides</Link>
+            <Link href="/about" className={linkCls} style={{ opacity: 0.66 }}>About</Link>
           </nav>
 
           {/* CTA */}
           <div className="flex items-center gap-3">
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-gold text-sm py-2 px-5 hidden sm:inline-flex">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-dark hidden sm:inline-flex" style={{ padding: "11px 24px", fontSize: "0.78rem" }}>
               Browse Pets
             </a>
             {/* Mobile hamburger */}
