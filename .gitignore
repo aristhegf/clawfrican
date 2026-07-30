@@ -1,12 +1,21 @@
-# Built Sanity Studio output (generated at deploy time by Vercel)
-public/studio/
+# Next.js
+.next/
+out/
 
 # Dependencies
 node_modules/
 
+# Environment (never commit secrets)
+.env
+.env.*
+.env.local
+.env.local.*
+
+# Built Sanity Studio (old architecture — no longer used)
+public/studio/
+
 # Misc
 .DS_Store
 *.pem
-*.local
-.env
-.env.*
+Thumbs.db
+tsconfig.tsbuildinfo
