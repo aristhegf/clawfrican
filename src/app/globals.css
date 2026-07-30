@@ -359,6 +359,7 @@
   .about-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 80px; align-items: start; padding-bottom: 40px; }
   @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 48px; } }
   .about-portrait { position: sticky; top: 120px; }
+  @media (max-width: 900px) { .about-portrait { position: static; } }
   .about-portrait .frame { border: 1px solid rgba(184,134,11,0.4); border-radius: 26px; padding: 10px; background: linear-gradient(160deg, rgba(255,193,7,0.1), transparent); }
   .about-portrait .frame-inner { border-radius: 18px; aspect-ratio: 4 / 5; overflow: hidden; position: relative; background: linear-gradient(155deg, #22190a, #0d0a04); display: grid; place-items: center; }
   .about-portrait .frame-inner .sil { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: 6rem; color: rgba(255,193,7,0.18); }

@@ -52,7 +52,6 @@ export default async function AboutPage() {
                 )}
               </div>
             </div>
-            <div className="cap">Founder, Clawfrican</div>
           </div>
 
           <div className="about-story">
