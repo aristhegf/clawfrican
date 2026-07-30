@@ -1,0 +1,12 @@
+# Built Sanity Studio output (generated at deploy time by Vercel)
+public/studio/
+
+# Dependencies
+node_modules/
+
+# Misc
+.DS_Store
+*.pem
+*.local
+.env
+.env.*

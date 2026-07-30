@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd studio && npm install && npx sanity build ../public/studio",
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/studio", "destination": "/studio/index.html" },
+    { "source": "/studio/(.*)", "destination": "/studio/$1" }
+  ]
+}
