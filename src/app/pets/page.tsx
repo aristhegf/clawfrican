@@ -13,8 +13,8 @@ export const revalidate = 3600;
 
 type Pet = {
   _id: string; name: string; breed: string; colour?: string; category: string;
-  age?: string; price?: string; status: string; staffPick?: boolean;
-  photo?: SanityImageSource; tags?: string[];
+  sex?: string; age?: string; price?: string; status: string; staffPick?: boolean;
+  photo?: SanityImageSource;
 };
 
 export default async function PetsPage({
@@ -26,30 +26,16 @@ export default async function PetsPage({
   const pets = await sanityFetch<Pet[]>({ query: ALL_PETS_QUERY, tags: ["pet"], fallback: [] });
 
   return (
-    <div style={{ paddingTop: "5rem" }}>
-      {/* Header */}
-      <div
-        style={{
-          background: "var(--color-emerald)",
-          padding: "4rem 1.5rem 3rem",
-          textAlign: "center",
-        }}
-      >
-        <span className="kicker kicker--light">OUR COLLECTION</span>
-        <h1 style={{ color: "var(--color-cream)", fontSize: "clamp(2.5rem, 6vw, 4rem)", marginBottom: "1rem" }}>
-          Find your companion.
-        </h1>
-        <p style={{ color: "rgba(245,245,220,0.65)", maxWidth: 520, margin: "0 auto", fontSize: "1.0625rem" }}>
-          {pets.length} companion{pets.length !== 1 ? "s" : ""} currently available — hand-raised, health certified, ready to meet you.
-        </p>
-      </div>
-
-      {/* Collection */}
-      <section className="section">
-        <div className="container" style={{ maxWidth: 1160, margin: "0 auto" }}>
-          <PetCollection pets={pets} initial={category ?? "all"} />
+    <>
+      <div className="coll-head">
+        <div className="wrap">
+          <h1>Available <em>pets.</em></h1>
+          <p>Each companion is photographed individually, health-certified and named. Tap any card to meet them properly.</p>
         </div>
-      </section>
-    </div>
+      </div>
+      <div className="wrap">
+        <PetCollection pets={pets} initial={category ?? "all"} />
+      </div>
+    </>
   );
 }

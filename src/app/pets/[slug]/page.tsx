@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import PetCard from "@/components/PetCard";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { PET_BY_SLUG_QUERY, ALL_PETS_FOR_PARAMS_QUERY, SITE_SETTINGS_QUERY } from "@/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
-import { nameToSlug, statusLabel, formatPrice } from "@/lib/utils";
+import { nameToSlug, statusLabel } from "@/lib/utils";
 import type { SanityImageSource } from "@sanity/image-url";
 
 export const revalidate = 3600;
@@ -22,11 +23,10 @@ type Pet = {
 
 type SiteSettings = { whatsapp?: string; email?: string };
 
+const CAT_LABEL: Record<string, string> = { cat: "Cats", bird: "Birds", reptile: "Reptiles" };
+
 export async function generateStaticParams() {
-  const pets = await sanityFetch<{ name: string }[]>({
-    query: ALL_PETS_FOR_PARAMS_QUERY,
-    fallback: [],
-  });
+  const pets = await sanityFetch<{ name: string }[]>({ query: ALL_PETS_FOR_PARAMS_QUERY, fallback: [] });
   return pets.map((p) => ({ slug: nameToSlug(p.name) }));
 }
 
@@ -65,15 +65,14 @@ export default async function PetPage({ params }: { params: Promise<{ slug: stri
   const wa = settings?.whatsapp
     ? `https://wa.me/${settings.whatsapp}?text=Hi! I'm interested in ${pet.name} (${pet.breed})`
     : `https://wa.me/2349000000000?text=Hi! I'm interested in ${pet.name}`;
-
   const email = settings?.email;
-  const mainImgUrl = pet.photo ? urlFor(pet.photo).width(800).height(800).url() : null;
-  const galleryUrls = (pet.gallery ?? []).map((img) => urlFor(img).width(400).height(400).url());
 
+  const mainImgUrl = pet.photo ? urlFor(pet.photo).width(900).height(900).url() : null;
+  const galleryUrls = (pet.gallery ?? []).map((img) => urlFor(img).width(300).height(300).url());
   const isAvailable = pet.status === "available" || pet.status === "new-arrival";
 
-  const quickFacts: [string, string][] = [
-    ["Category", pet.category === "cat" ? "Cat" : pet.category === "bird" ? "Bird" : "Reptile"],
+  const facts: [string, string][] = [
+    ["Category", CAT_LABEL[pet.category] ?? pet.category],
     pet.sex ? ["Sex", pet.sex] : null,
     pet.age ? ["Age", pet.age] : null,
     pet.colour ? ["Colour", pet.colour] : null,
@@ -88,155 +87,142 @@ export default async function PetPage({ params }: { params: Promise<{ slug: stri
     pet.category === "reptile" && pet.feedingSchedule ? ["Feeding", pet.feedingSchedule] : null,
   ].filter(Boolean) as [string, string][];
 
+  const others = pets.filter((p) => p._id !== pet._id && p.status !== "sold").slice(0, 3);
+
   return (
-    <div style={{ paddingTop: "4.5rem" }}>
-      {/* Breadcrumb */}
-      <div className="container" style={{ maxWidth: 1160, margin: "0 auto", padding: "1.25rem 1.5rem" }}>
-        <nav style={{ fontSize: "0.813rem", color: "rgba(20,16,8,0.45)", display: "flex", gap: "0.5rem" }}>
-          <Link href="/" className="hover:opacity-70">Home</Link>
+    <div className="pet-hero">
+      <div className="wrap">
+        {/* Breadcrumb */}
+        <nav className="crumb">
+          <Link href="/pets">← Available Pets</Link>
           <span>/</span>
-          <Link href="/pets" className="hover:opacity-70">Pets</Link>
+          <Link href={`/pets?category=${pet.category}`}>{CAT_LABEL[pet.category] ?? ""}</Link>
           <span>/</span>
           <span style={{ color: "var(--color-ink)" }}>{pet.name}</span>
         </nav>
-      </div>
 
-      {/* Main content */}
-      <section className="section-sm">
-        <div
-          className="container pet-detail-grid"
-          style={{ maxWidth: 1160, margin: "0 auto", padding: "0 1.5rem" }}
-        >
-          {/* ── Left: Images ── */}
+        <div className="pet-layout">
+          {/* ── Left: gallery ── */}
           <div>
-            {/* Main photo */}
-            <div style={{ position: "relative", aspectRatio: "1/1", borderRadius: 20, overflow: "hidden", background: "linear-gradient(135deg, var(--color-emerald), var(--color-gold-deep))", marginBottom: "1rem" }}>
+            <div className="pg-main">
               {mainImgUrl ? (
-                <Image src={mainImgUrl} alt={pet.name} fill sizes="(max-width:768px) 100vw, 50vw" className="object-cover" priority />
+                <Image src={mainImgUrl} alt={pet.name} fill sizes="(max-width:960px) 100vw, 55vw" className="object-cover" priority />
               ) : (
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "6rem" }}>
-                  {pet.category === "cat" ? "🐱" : pet.category === "bird" ? "🦜" : "🦎"}
-                </div>
+                <span className="sil">{pet.name[0]}.</span>
               )}
-              {pet.staffPick && (
-                <span style={{ position: "absolute", top: "1rem", left: "1rem", background: "var(--color-gold)", color: "var(--color-ink)", padding: "0.25rem 0.75rem", borderRadius: 50, fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                  ⭐ Staff Pick
-                </span>
-              )}
+              {pet.staffPick && <span className="staffpick">⭐ Staff Pick</span>}
             </div>
-
-            {/* Gallery thumbnails */}
             {galleryUrls.length > 0 && (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.625rem" }}>
+              <div className="pg-thumbs">
                 {galleryUrls.slice(0, 4).map((url, i) => (
-                  <div key={i} style={{ position: "relative", aspectRatio: "1/1", borderRadius: 10, overflow: "hidden", background: "linear-gradient(135deg, var(--color-emerald), var(--color-gold-deep))" }}>
-                    <Image src={url} alt={`${pet.name} photo ${i + 2}`} fill sizes="80px" className="object-cover" />
+                  <div key={i} className="pg-thumb">
+                    <Image src={url} alt={`${pet.name} photo ${i + 2}`} fill sizes="120px" className="object-cover" />
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {/* ── Right: Details ── */}
+          {/* ── Right: details ── */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-              <span
-                style={{
-                  padding: "0.25rem 0.75rem", borderRadius: 50, fontSize: "0.75rem", fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.06em",
-                  background: pet.status === "available" ? "#22c55e" : pet.status === "new-arrival" ? "#3b82f6" : pet.status === "reserved" ? "#eab308" : "#a855f7",
-                  color: pet.status === "reserved" ? "#141008" : "#fff",
-                }}
-              >
-                {statusLabel(pet.status)}
+            <div className="pet-title-block">
+              <span className="avail">
+                {isAvailable && <span className="pulse" />}
+                {isAvailable ? "Available now" : statusLabel(pet.status)}
               </span>
-              <span className="kicker" style={{ marginBottom: 0 }}>{pet.category === "cat" ? "Cat" : pet.category === "bird" ? "Bird" : "Reptile"}</span>
-            </div>
-
-            <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 4vw, 3rem)", marginBottom: "0.375rem" }}>{pet.name}</h1>
-            <p style={{ color: "rgba(20,16,8,0.55)", fontSize: "1rem", marginBottom: "1.5rem" }}>
-              {[pet.breed, pet.colour].filter(Boolean).join(" · ")}
-            </p>
-
-            {pet.price && (
-              <p style={{ fontFamily: "var(--font-display)", fontSize: "1.75rem", color: "var(--color-bronze)", marginBottom: "1.5rem" }}>
-                {pet.price}
+              <h1 className="pet-page-name">{pet.name}</h1>
+              <p className="pet-page-sub">
+                {pet.breed}
+                {pet.colour && <><span className="sep">·</span>{pet.colour}</>}
               </p>
-            )}
-
-            {/* Personality tags */}
-            {pet.tags && pet.tags.length > 0 && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.5rem" }}>
-                {pet.tags.map((tag) => <span key={tag} className="pill pill--gold">{tag}</span>)}
-              </div>
-            )}
-
-            {/* About */}
-            {pet.story && (
-              <div style={{ marginBottom: "1.75rem" }}>
-                <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.25rem", fontWeight: 400, marginBottom: "0.75rem" }}>About {pet.name}</h2>
-                <p style={{ color: "rgba(20,16,8,0.72)", lineHeight: 1.75, fontSize: "0.9375rem" }}>{pet.story}</p>
-              </div>
-            )}
-
-            {/* Quick facts */}
-            <div style={{ borderRadius: 12, border: "1px solid var(--color-line)", padding: "1.25rem", marginBottom: "1.5rem", background: "#fff" }}>
-              <h3 style={{ fontFamily: "var(--font-display)", fontSize: "0.75rem", fontWeight: 400, marginBottom: "1rem", color: "rgba(20,16,8,0.55)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Quick Facts
-              </h3>
-              <dl style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.625rem 1rem" }}>
-                {quickFacts.map(([label, value]) => (
-                  <div key={label}>
-                    <dt style={{ fontSize: "0.75rem", color: "rgba(20,16,8,0.4)", marginBottom: "0.125rem" }}>{label}</dt>
-                    <dd style={{ fontSize: "0.9375rem", fontWeight: 600 }}>{value}</dd>
-                  </div>
-                ))}
-              </dl>
+              {pet.price && <div className="pet-page-price">{pet.price}</div>}
             </div>
 
-            {/* Health */}
-            {pet.health && pet.health.length > 0 && (
-              <div style={{ marginBottom: "1.75rem" }}>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "0.75rem", fontWeight: 400, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(20,16,8,0.55)", marginBottom: "0.75rem" }}>
-                  Health & Certifications
-                </h3>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  {pet.health.map((h) => (
-                    <span key={h} style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", padding: "0.3rem 0.75rem", borderRadius: 50, background: "rgba(34,197,94,0.1)", color: "#166534", fontSize: "0.813rem", fontWeight: 600 }}>
-                      ✓ {h}
-                    </span>
-                  ))}
+            <div className="pblock">
+              <h3>Quick Facts</h3>
+              <div className="facts">
+                {facts.map(([k, v]) => (
+                  <div key={k} className="fact"><div className="k">{k}</div><div className="v">{v}</div></div>
+                ))}
+              </div>
+            </div>
+
+            {pet.tags && pet.tags.length > 0 && (
+              <div className="pblock">
+                <h3>Personality</h3>
+                <div className="chips">
+                  {pet.tags.map((tag) => <span key={tag} className="chip">{tag}</span>)}
                 </div>
               </div>
             )}
 
-            {/* CTA buttons */}
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ fontSize: "0.9375rem", flex: 1 }}>
-                {isAvailable ? `Reserve ${pet.name} on WhatsApp` : "Join the Waitlist"}
-              </a>
-              {email && (
-                <a href={`mailto:${email}?subject=Enquiry about ${pet.name}&body=Hi, I'm interested in ${pet.name} (${pet.breed}).`}
-                  className="btn btn-ghost-dark" style={{ fontSize: "0.9375rem" }}>
-                  Email
-                </a>
-              )}
+            {pet.health && pet.health.length > 0 && (
+              <div className="pblock">
+                <h3>Health</h3>
+                <ul className="incl">
+                  {pet.health.map((h) => (
+                    <li key={h}><span className="tick">✓</span>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {pet.story && (
+              <div className="pblock">
+                <h3>About {pet.name}</h3>
+                <p className="about-txt">{pet.story}</p>
+              </div>
+            )}
+
+            <div className="pblock">
+              <h3>What&rsquo;s Included</h3>
+              <ul className="incl">
+                <li><span className="tick">✓</span>Complete health records &amp; vet certification</li>
+                <li><span className="tick">✓</span>Breed-specific care guide (digital &amp; print)</li>
+                <li><span className="tick">✓</span>Starter pack — food, care kit &amp; comfort item</li>
+                <li><span className="tick">✓</span>30-day post-adoption support on WhatsApp</li>
+              </ul>
             </div>
 
-            {/* Included */}
-            <div style={{ marginTop: "1.75rem", padding: "1.25rem", borderRadius: 12, background: "rgba(19,46,39,0.05)", border: "1px solid rgba(19,46,39,0.1)" }}>
-              <p style={{ fontWeight: 600, fontSize: "0.875rem", marginBottom: "0.625rem" }}>Every Clawfrican pet includes:</p>
-              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.375rem" }}>
-                {["Health records & vet certificate", "Breed-specific care guide", "Starter nutrition pack", "30 days of WhatsApp support", "Nationwide climate-controlled delivery"].map((item) => (
-                  <li key={item} style={{ fontSize: "0.875rem", color: "rgba(20,16,8,0.7)", display: "flex", gap: "0.5rem" }}>
-                    <span style={{ color: "var(--color-gold-deep)", flexShrink: 0 }}>→</span> {item}
-                  </li>
-                ))}
-              </ul>
+            <div className="pblock">
+              <h3>Delivery</h3>
+              <div className="deliv">
+                <div className="ic">→</div>
+                <p><b>Climate-controlled delivery to all 36 states.</b> Lagos deliveries arrive within 48 hours of reservation; nationwide within 3–5 days. You&rsquo;ll receive photo updates at every step.</p>
+              </div>
+            </div>
+
+            <div className="pet-cta-zone">
+              <a className="btn btn-dark" href={wa} target="_blank" rel="noopener noreferrer">
+                {isAvailable ? "Reserve on WhatsApp" : "Join the Waitlist"} <span className="arr">→</span>
+              </a>
+              {email && (
+                <a className="btn btn-ghost" href={`mailto:${email}?subject=Enquiry about ${pet.name}&body=Hi, I'm interested in ${pet.name} (${pet.breed}).`}>
+                  Enquire by Email
+                </a>
+              )}
+              <p className="pet-note">Reservation holds this pet for 72 hours · Fully refundable</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* More pets */}
+      {others.length > 0 && (
+        <section className="more-strip">
+          <div className="wrap">
+            <div className="sec-head">
+              <div>
+                <div className="kicker">Keep exploring</div>
+                <h2 className="sec-title">Others you&rsquo;ll <em>adore.</em></h2>
+              </div>
+            </div>
+            <div className="more-grid">
+              {others.map((p) => <PetCard key={p._id} pet={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* JSON-LD */}
       <script

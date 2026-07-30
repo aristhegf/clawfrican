@@ -33,21 +33,29 @@ export default async function FaqPage() {
   const wa = settings?.whatsapp ? `https://wa.me/${settings.whatsapp}` : "#";
 
   return (
-    <div style={{ paddingTop: "5rem" }}>
-      <div style={{ background: "var(--color-emerald)", padding: "4rem 1.5rem 3rem", textAlign: "center" }}>
-        <span className="kicker kicker--light">COMMON QUESTIONS</span>
-        <h1 style={{ color: "var(--color-cream)", fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>Answers before you ask.</h1>
+    <>
+      <div className="page-head">
+        <div className="wrap">
+          <div className="kicker">FAQ</div>
+          <h1>Questions, <em>answered.</em></h1>
+          <p>Everything you might want to know before welcoming a Clawfrican companion home.</p>
+        </div>
       </div>
 
-      <section className="section">
-        <div className="container" style={{ maxWidth: 760, margin: "0 auto" }}>
-          <FaqAccordion items={faqs} />
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="faq-wrap">
+            <FaqAccordion items={faqs} />
 
-          <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem", borderRadius: 16, background: "rgba(19,46,39,0.05)", border: "1px solid rgba(19,46,39,0.1)" }}>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: "1.25rem", marginBottom: "1rem" }}>Still have a question?</p>
-            <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-gold">Ask on WhatsApp</a>
-              <Link href="/pets" className="btn btn-ghost-dark">Browse Pets</Link>
+            <div style={{ textAlign: "center", background: "#fff", border: "1px solid var(--color-line)", borderRadius: 18, padding: "36px 26px", marginTop: 24 }}>
+              <h4 style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem", marginBottom: 10 }}>Still have a question?</h4>
+              <p style={{ fontSize: "0.92rem", color: "rgba(20,16,8,0.6)", maxWidth: "44ch", margin: "0 auto 22px", lineHeight: 1.6 }}>
+                Tayo, our AI consultant, or our team on WhatsApp are happy to help.
+              </p>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-gold">Ask on WhatsApp</a>
+                <Link href="/pets" className="btn btn-ghost">Browse Pets</Link>
+              </div>
             </div>
           </div>
         </div>
@@ -67,6 +75,6 @@ export default async function FaqPage() {
           }),
         }}
       />
-    </div>
+    </>
   );
 }

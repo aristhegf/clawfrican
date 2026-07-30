@@ -17,10 +17,7 @@ type Guide = {
 };
 
 export async function generateStaticParams() {
-  const slugs = await sanityFetch<{ slug: { current: string } }[]>({
-    query: ALL_GUIDE_SLUGS_QUERY,
-    fallback: [],
-  });
+  const slugs = await sanityFetch<{ slug: { current: string } }[]>({ query: ALL_GUIDE_SLUGS_QUERY, fallback: [] });
   return slugs.map((s) => ({ slug: s.slug.current }));
 }
 
@@ -45,15 +42,7 @@ const catMap: Record<string, string> = { cat: "Cats", bird: "Birds", reptile: "R
 const portableComponents = {
   types: {
     image: ({ value }: { value: SanityImageSource }) => (
-      <div style={{ margin: "2rem 0", borderRadius: 12, overflow: "hidden" }}>
-        <Image
-          src={urlFor(value).width(800).url()}
-          alt=""
-          width={800}
-          height={450}
-          style={{ width: "100%", height: "auto" }}
-        />
-      </div>
+      <Image src={urlFor(value).width(800).url()} alt="" width={800} height={450} style={{ width: "100%", height: "auto" }} />
     ),
   },
 };
@@ -63,71 +52,48 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   const guide = await sanityFetch<Guide | null>({ query: GUIDE_BY_SLUG_QUERY, params: { slug }, tags: ["guide"], fallback: null });
   if (!guide) notFound();
 
-  const coverUrl = guide.cover ? urlFor(guide.cover).width(1200).height(600).url() : null;
+  const coverUrl = guide.cover ? urlFor(guide.cover).width(1200).height(675).url() : null;
 
   return (
-    <div style={{ paddingTop: "4.5rem" }}>
-      {/* Breadcrumb */}
-      <div className="container" style={{ maxWidth: 760, margin: "0 auto", padding: "1.25rem 1.5rem" }}>
-        <nav style={{ fontSize: "0.813rem", color: "rgba(20,16,8,0.45)", display: "flex", gap: "0.5rem" }}>
-          <Link href="/" className="hover:opacity-70">Home</Link>
+    <>
+      <div className="wrap" style={{ paddingTop: 120 }}>
+        <nav className="crumb">
+          <Link href="/guides">← Care Resources</Link>
           <span>/</span>
-          <Link href="/guides" className="hover:opacity-70">Guides</Link>
-          <span>/</span>
-          <span style={{ color: "var(--color-ink)" }}>{guide.title}</span>
+          <span style={{ color: "var(--color-ink)" }}>{catMap[guide.category] ?? "General"}</span>
         </nav>
       </div>
 
-      {/* Article */}
-      <article>
-        <div className="container" style={{ maxWidth: 760, margin: "0 auto", padding: "0 1.5rem 5rem" }}>
-          <div style={{ marginBottom: "1.25rem", display: "flex", gap: "0.75rem", alignItems: "center" }}>
-            <span className="kicker" style={{ marginBottom: 0 }}>Guide · {catMap[guide.category] ?? "General"}</span>
-            {guide.readTime && <span style={{ fontSize: "0.75rem", color: "rgba(20,16,8,0.45)" }}>{guide.readTime} min read</span>}
-          </div>
-
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 3rem)", lineHeight: 1.1, marginBottom: "1.25rem" }}>
-            {guide.title}
-          </h1>
-
-          <p style={{ fontSize: "1.125rem", color: "rgba(20,16,8,0.65)", lineHeight: 1.7, marginBottom: "2.5rem" }}>
-            {guide.excerpt}
-          </p>
-
+      <div className="wrap">
+        <article className="gd-wrap">
           {coverUrl && (
-            <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", marginBottom: "2.5rem", aspectRatio: "2/1" }}>
+            <div className="gd-cover">
               <Image src={coverUrl} alt={guide.title} fill className="object-cover" priority sizes="(max-width:760px) 100vw, 760px" />
             </div>
           )}
+          <div className="gd-meta">
+            <span className="gd-tag">{catMap[guide.category] ?? "General"}</span>
+            {guide.readTime && <span style={{ fontSize: "0.8rem", color: "rgba(20,16,8,0.5)" }}>{guide.readTime} min read</span>}
+          </div>
+
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 4.4vw, 3rem)", fontWeight: 400, lineHeight: 1.15, marginBottom: 16 }}>
+            {guide.title}
+          </h1>
+          <p style={{ fontSize: "1.12rem", color: "rgba(20,16,8,0.62)", lineHeight: 1.7, marginBottom: 36 }}>
+            {guide.excerpt}
+          </p>
 
           {guide.body && (
-            <div
-              style={{
-                fontSize: "1rem",
-                lineHeight: 1.8,
-                color: "rgba(20,16,8,0.82)",
-              }}
-              className="prose-guide"
-            >
-              <style>{`
-                .prose-guide h2 { font-family: var(--font-display); font-size: 1.625rem; font-weight: 400; margin: 2.5rem 0 1rem; color: var(--color-ink); }
-                .prose-guide h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 400; margin: 2rem 0 0.75rem; color: var(--color-ink); }
-                .prose-guide p { margin-bottom: 1.25rem; }
-                .prose-guide ul, .prose-guide ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-                .prose-guide li { line-height: 1.7; }
-                .prose-guide strong { font-weight: 700; color: var(--color-ink); }
-                .prose-guide a { color: var(--color-bronze); text-decoration: underline; }
-              `}</style>
+            <div className="gd-body">
               <PortableText value={guide.body as Parameters<typeof PortableText>[0]["value"]} components={portableComponents} />
             </div>
           )}
 
-          {/* Back */}
-          <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid var(--color-line)" }}>
-            <Link href="/guides" className="btn btn-ghost-dark" style={{ fontSize: "0.875rem" }}>← All Guides</Link>
+          <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--color-line)" }}>
+            <Link href="/guides" className="btn btn-ghost">← All Guides</Link>
           </div>
-        </div>
-      </article>
-    </div>
+        </article>
+      </div>
+    </>
   );
 }
