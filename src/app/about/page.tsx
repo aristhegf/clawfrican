@@ -16,6 +16,13 @@ export const revalidate = 3600;
 type AboutData = { headline?: string; story?: string; portrait?: SanityImageSource; signature?: string };
 type SiteSettings = { whatsapp?: string };
 
+// Turn the "<em>…</em>" convention used in CMS headlines into a real italic element.
+function renderHeadline(text: string) {
+  const m = text.match(/^([\s\S]*?)<em>([\s\S]*?)<\/em>([\s\S]*)$/i);
+  if (!m) return text;
+  return <>{m[1]}<em>{m[2]}</em>{m[3]}</>;
+}
+
 export default async function AboutPage() {
   const [about] = await Promise.all([
     sanityFetch<AboutData>({ query: ABOUT_QUERY, tags: ["aboutPage"], fallback: {} }),
@@ -24,6 +31,9 @@ export default async function AboutPage() {
 
   const portraitUrl = about?.portrait ? urlFor(about.portrait).width(600).height(750).url() : null;
   const signature = about?.signature || "Aris";
+
+  // CMS headline uses an <em>…</em> convention to italicise part of the title.
+  const headline = about?.headline ? renderHeadline(about.headline) : <>The person behind <em>the paws.</em></>;
   const storyParas = about?.story
     ? about.story.split("\n").filter(Boolean)
     : [
@@ -36,7 +46,7 @@ export default async function AboutPage() {
       <div className="about-head">
         <div className="wrap">
           <div className="kicker">Our Story</div>
-          <h1>{about?.headline || <>The person behind <em>the paws.</em></>}</h1>
+          <h1>{headline}</h1>
         </div>
       </div>
 
