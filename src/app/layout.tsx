@@ -5,6 +5,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import TayoChat from "@/components/TayoChat";
+import ScrollReveal from "@/components/ScrollReveal";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { SITE_SETTINGS_QUERY } from "@/lib/queries";
 
@@ -67,6 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main>{children}</main>
         <Footer settings={settings} />
         <TayoChat wa={wa} />
+        <ScrollReveal />
       </body>
     </html>
   );
