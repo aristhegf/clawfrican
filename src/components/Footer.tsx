@@ -40,8 +40,8 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           style={{ maxWidth: 1160, gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" }}
         >
           <div>
-            <p style={{ fontFamily: "var(--font-wordmark)", letterSpacing: "0.08em", fontSize: "1rem", marginBottom: "0.75rem" }}>
-              🐾 CLAWFRICAN
+            <p style={{ fontFamily: "var(--font-wordmark)", letterSpacing: "0.02em", fontSize: "1.25rem", fontWeight: 500, marginBottom: "0.75rem" }}>
+              Clawfrican
             </p>
             <p style={{ color: "rgba(245,245,220,0.5)", fontSize: "0.813rem", lineHeight: 1.6 }}>
               {settings?.address || "Lagos · By appointment"}

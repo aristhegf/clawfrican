@@ -38,13 +38,12 @@ export default function Nav({ wa }: { wa: string }) {
       >
         <div className="container mx-auto px-6 h-16 flex items-center justify-between" style={{ maxWidth: 1160 }}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span style={{ fontSize: "1.5rem" }}>🐾</span>
+          <Link href="/" className="shrink-0">
             <span
-              style={{ fontFamily: "var(--font-wordmark)", letterSpacing: "0.08em", fontSize: "1.125rem" }}
-              className={`font-normal tracking-widest ${isTransparent ? "text-cream" : "text-ink"}`}
+              style={{ fontFamily: "var(--font-wordmark)", letterSpacing: "0.02em", fontSize: "1.5rem", fontWeight: 500 }}
+              className={`font-medium ${isTransparent ? "text-cream" : "text-ink"}`}
             >
-              CLAWFRICAN
+              Clawfrican
             </span>
           </Link>
 
