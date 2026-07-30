@@ -104,8 +104,8 @@ export default async function PetPage({ params }: { params: Promise<{ slug: stri
       {/* Main content */}
       <section className="section-sm">
         <div
-          className="container"
-          style={{ maxWidth: 1160, margin: "0 auto", padding: "0 1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "start" }}
+          className="container pet-detail-grid"
+          style={{ maxWidth: 1160, margin: "0 auto", padding: "0 1.5rem" }}
         >
           {/* ── Left: Images ── */}
           <div>

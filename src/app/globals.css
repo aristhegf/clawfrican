@@ -148,6 +148,21 @@
     margin-inline: auto;
   }
 
+  /* ── Pet detail layout ── */
+  .pet-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 767px) {
+    .pet-detail-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
   /* ── Pet card ── */
   .pet-card {
     display: flex;
