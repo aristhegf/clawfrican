@@ -33,13 +33,22 @@
     background-color: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-body);
-    /* Avenir (geometric sans) reads well at a normal weight. */
+    /* Avenir. Only Regular + Bold are available, so the body copy is thickened
+       toward a "medium" weight with a hairline text-stroke for daytime legibility. */
     font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.65;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-stroke: 0.34px currentColor;
+  }
+
+  /* Keep the display serif (headings, wordmark) and already-bold UI labels crisp
+     — the stroke thickening is only for the Avenir reading copy. */
+  h1, h2, h3, h4, h5, h6,
+  .logo, .pet-name, .pet-price, .big, .sil,
+  .about-txt, .about-quote, .about-story .lead, .rev p,
+  .btn, .nav-links a, .kicker, .filter, .foot-col h5, .staffpick, .badge {
+    -webkit-text-stroke: 0;
   }
 
   /* Film grain */
