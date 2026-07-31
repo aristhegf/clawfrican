@@ -17,14 +17,13 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const metropolis = localFont({
-  variable: "--font-metropolis",
+// Only Regular + Bold supplied, so map weight ranges: 100–500 -> Regular, 501–900 -> Bold.
+const avenir = localFont({
+  variable: "--font-avenir",
   display: "swap",
   src: [
-    { path: "../fonts/metropolis/Metropolis-Regular.otf", weight: "400", style: "normal" },
-    { path: "../fonts/metropolis/Metropolis-Medium.otf", weight: "500", style: "normal" },
-    { path: "../fonts/metropolis/Metropolis-SemiBold.otf", weight: "600", style: "normal" },
-    { path: "../fonts/metropolis/Metropolis-Bold.otf", weight: "700", style: "normal" },
+    { path: "../fonts/avenir/Avenir-Regular.ttf", weight: "100 500", style: "normal" },
+    { path: "../fonts/avenir/Avenir-Bold.ttf", weight: "501 900", style: "normal" },
   ],
 });
 
@@ -66,7 +65,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const wa = settings?.whatsapp ? `https://wa.me/${settings.whatsapp}` : "https://wa.me/2349000000000";
 
   return (
-    <html lang="en" className={`${fraunces.variable} ${metropolis.variable} ${bernardo.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${avenir.variable} ${bernardo.variable}`}>
       <body>
         <Nav wa={wa} />
         <main>{children}</main>

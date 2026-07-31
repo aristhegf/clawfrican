@@ -12,7 +12,7 @@
   --color-line: rgba(20, 16, 8, 0.13);
 
   --font-display: var(--font-fraunces), Georgia, serif;
-  --font-body: var(--font-metropolis), system-ui, sans-serif;
+  --font-body: var(--font-avenir), system-ui, sans-serif;
   --font-wordmark: var(--font-bernardo), "Fraunces", serif;
 }
 
@@ -33,7 +33,7 @@
     background-color: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-body);
-    /* Metropolis (Avenir-like geometric sans) reads well at a normal weight. */
+    /* Avenir (geometric sans) reads well at a normal weight. */
     font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.65;
