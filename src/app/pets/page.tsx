@@ -17,12 +17,7 @@ type Pet = {
   photo?: SanityImageSource;
 };
 
-export default async function PetsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const { category } = await searchParams;
+export default async function PetsPage() {
   const pets = await sanityFetch<Pet[]>({ query: ALL_PETS_QUERY, tags: ["pet"], fallback: [] });
 
   return (
@@ -34,7 +29,7 @@ export default async function PetsPage({
         </div>
       </div>
       <div className="wrap">
-        <PetCollection pets={pets} initial={category ?? "all"} />
+        <PetCollection pets={pets} />
       </div>
     </>
   );

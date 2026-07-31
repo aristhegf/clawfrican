@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PetCard from "./PetCard";
 import type { SanityImageSource } from "@sanity/image-url";
 
@@ -19,6 +19,13 @@ const FILTERS = [
 
 export default function PetCollection({ pets, initial = "all" }: { pets: Pet[]; initial?: string }) {
   const [active, setActive] = useState(initial);
+
+  // Read ?category= from the URL on the client so the page can stay fully static.
+  useEffect(() => {
+    const c = new URLSearchParams(window.location.search).get("category");
+    if (c && FILTERS.some((f) => f.value === c)) setActive(c);
+  }, []);
+
   const filtered = active === "all" ? pets : pets.filter((p) => p.category === active);
 
   return (
