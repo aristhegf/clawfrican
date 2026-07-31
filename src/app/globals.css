@@ -33,7 +33,12 @@
     background-color: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-body);
-    line-height: 1.6;
+    /* Josefin Sans has a small x-height and a light regular weight, so nudge
+       size, weight, tracking and leading up a touch for legibility. */
+    font-size: 1.0625rem;
+    font-weight: 500;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
