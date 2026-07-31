@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Josefin_Sans } from "next/font/google";
+import { Fraunces } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/Nav";
@@ -17,11 +17,15 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const josefin = Josefin_Sans({
-  subsets: ["latin"],
-  variable: "--font-josefin",
-  weight: ["300", "400", "500", "600", "700"],
+const metropolis = localFont({
+  variable: "--font-metropolis",
   display: "swap",
+  src: [
+    { path: "../fonts/metropolis/Metropolis-Regular.otf", weight: "400", style: "normal" },
+    { path: "../fonts/metropolis/Metropolis-Medium.otf", weight: "500", style: "normal" },
+    { path: "../fonts/metropolis/Metropolis-SemiBold.otf", weight: "600", style: "normal" },
+    { path: "../fonts/metropolis/Metropolis-Bold.otf", weight: "700", style: "normal" },
+  ],
 });
 
 const bernardo = localFont({
@@ -62,7 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const wa = settings?.whatsapp ? `https://wa.me/${settings.whatsapp}` : "https://wa.me/2349000000000";
 
   return (
-    <html lang="en" className={`${fraunces.variable} ${josefin.variable} ${bernardo.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${metropolis.variable} ${bernardo.variable}`}>
       <body>
         <Nav wa={wa} />
         <main>{children}</main>
