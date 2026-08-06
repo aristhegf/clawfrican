@@ -17,21 +17,7 @@ export async function POST(req: NextRequest) {
   const expected = process.env.SANITY_REVALIDATE_SECRET;
 
   if (!expected || secret !== expected) {
-    // TEMPORARY diagnostics — safe (no secret values exposed), remove once the
-    // mismatch between Vercel's env var and the webhook URL is root-caused.
-    return NextResponse.json(
-      {
-        revalidated: false,
-        message: "Invalid secret",
-        debug: {
-          envVarSet: !!expected,
-          envVarLength: expected?.length ?? 0,
-          receivedLength: secret?.length ?? 0,
-          receivedIsNull: secret === null,
-        },
-      },
-      { status: 401 }
-    );
+    return NextResponse.json({ revalidated: false, message: "Invalid secret" }, { status: 401 });
   }
 
   let type: string | undefined;
