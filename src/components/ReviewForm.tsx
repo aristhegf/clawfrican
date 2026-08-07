@@ -165,12 +165,13 @@ export default function ReviewForm() {
 
       <div>
         <label style={labelStyle} htmlFor="rf-location">
-          Location <span style={{ fontWeight: 400, opacity: 0.6 }}>(optional)</span>
+          Location
         </label>
         <input
           id="rf-location"
           name="location"
           type="text"
+          required
           maxLength={60}
           value={location}
           onChange={(e) => setLocation(e.target.value)}

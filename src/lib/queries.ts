@@ -22,12 +22,12 @@ export const PET_BY_SLUG_QUERY = `*[_type=="pet"]{
 
 export const ALL_PETS_FOR_PARAMS_QUERY = `*[_type=="pet" && status!="sold"]{name}`;
 
-export const TESTIMONIALS_QUERY = `*[_type=="testimonial" && status != "pending"] | order(_createdAt desc)[0...6]{
-  _id, name, location, quote, rating, photo
+export const TESTIMONIALS_QUERY = `*[_type=="testimonial" && status != "pending"] | order(coalesce(submittedAt, _createdAt) desc)[0...6]{
+  _id, name, location, quote, rating, photo, submittedAt
 }`;
 
-export const ALL_TESTIMONIALS_QUERY = `*[_type=="testimonial" && status != "pending"] | order(_createdAt desc){
-  _id, name, location, quote, rating, photo
+export const ALL_TESTIMONIALS_QUERY = `*[_type=="testimonial" && status != "pending"] | order(coalesce(submittedAt, _createdAt) desc){
+  _id, name, location, quote, rating, photo, submittedAt
 }`;
 
 export const FEATURED_GUIDES_QUERY = `*[_type=="guide" && featured==true] | order(publishedAt desc)[0...3]{

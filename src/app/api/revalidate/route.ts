@@ -36,6 +36,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  revalidateTag(type, "max");
+  // Next.js 16's revalidateTag requires a second "profile" argument. Named
+  // profiles like "max" resolve to a long-lived cache-life config and only
+  // mark the tag for stale-while-revalidate — they do NOT force an immediate
+  // refetch. Passing an explicit { expire: 0 } is what actually reproduces
+  // the old "revalidate this right now" behavior.
+  revalidateTag(type, { expire: 0 });
   return NextResponse.json({ revalidated: true, tag: type, now: Date.now() });
 }

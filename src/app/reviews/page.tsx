@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { ALL_TESTIMONIALS_QUERY } from "@/lib/queries";
+import { formatReviewDate } from "@/lib/utils";
 import ReviewForm from "@/components/ReviewForm";
 import type { SanityImageSource } from "@sanity/image-url";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-type Testimonial = { _id: string; name: string; location?: string; quote: string; rating: number; photo?: SanityImageSource };
+type Testimonial = { _id: string; name: string; location?: string; quote: string; rating: number; photo?: SanityImageSource; submittedAt?: string };
 
 export default async function ReviewsPage() {
   const testimonials = await sanityFetch<Testimonial[]>({ query: ALL_TESTIMONIALS_QUERY, tags: ["testimonial"], fallback: [] });
@@ -40,7 +41,9 @@ export default async function ReviewsPage() {
                     <div className="av">{t.name?.[0] ?? "C"}</div>
                     <div>
                       <div className="nm">{t.name}</div>
-                      {t.location && <div className="lc">{t.location}</div>}
+                      {(t.location || formatReviewDate(t.submittedAt)) && (
+                        <div className="lc">{[t.location, formatReviewDate(t.submittedAt)].filter(Boolean).join(" · ")}</div>
+                      )}
                     </div>
                   </div>
                 </div>

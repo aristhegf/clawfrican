@@ -5,6 +5,7 @@ import FaqAccordion from "@/components/FaqAccordion";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { FEATURED_PETS_QUERY, TESTIMONIALS_QUERY, FEATURED_GUIDES_QUERY, FAQS_QUERY, SITE_SETTINGS_QUERY } from "@/lib/queries";
 import { getFaqGroups } from "@/lib/faqs";
+import { formatReviewDate } from "@/lib/utils";
 import type { SanityImageSource } from "@sanity/image-url";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ type Pet = {
   sex?: string; age?: string; price?: string; status: string; staffPick?: boolean;
   photo?: SanityImageSource;
 };
-type Testimonial = { _id: string; name: string; location?: string; quote: string; rating: number };
+type Testimonial = { _id: string; name: string; location?: string; quote: string; rating: number; submittedAt?: string };
 type Guide = { _id: string; title: string; slug: { current: string }; category: string; excerpt: string; readTime?: number };
 type Faq = { _id: string; question: string; answer: string; category?: string };
 type SiteSettings = { whatsapp?: string; email?: string; instagram?: string; tiktok?: string; address?: string };
@@ -146,7 +147,9 @@ export default async function HomePage() {
                     <div className="av">{t.name?.[0] ?? "C"}</div>
                     <div>
                       <div className="nm">{t.name}</div>
-                      {t.location && <div className="lc">{t.location}</div>}
+                      {(t.location || formatReviewDate(t.submittedAt)) && (
+                        <div className="lc">{[t.location, formatReviewDate(t.submittedAt)].filter(Boolean).join(" · ")}</div>
+                      )}
                     </div>
                   </div>
                 </div>

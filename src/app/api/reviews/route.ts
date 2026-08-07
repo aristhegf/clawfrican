@@ -32,6 +32,9 @@ export async function POST(req: NextRequest) {
   if (!name || name.length > 80) {
     return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
   }
+  if (!location || location.length > 60) {
+    return NextResponse.json({ error: "Please enter your location." }, { status: 400 });
+  }
   if (!quote || quote.length < 10) {
     return NextResponse.json({ error: "Please write a few words about your experience." }, { status: 400 });
   }
@@ -70,11 +73,12 @@ export async function POST(req: NextRequest) {
   const doc: Record<string, unknown> = {
     _type: "testimonial",
     name,
+    location,
     quote,
     rating,
     status: "pending",
+    submittedAt: new Date().toISOString(),
   };
-  if (location) doc.location = location;
   if (photoAssetId) doc.photo = { _type: "image", asset: { _type: "reference", _ref: photoAssetId } };
 
   const mutateRes = await fetch(`https://${projectId}.api.sanity.io/v${apiVersion}/data/mutate/${dataset}`, {

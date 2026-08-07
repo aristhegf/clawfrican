@@ -36,3 +36,10 @@ export function statusColor(status: string): string {
 export function stars(rating: number): string {
   return "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating));
 }
+
+export function formatReviewDate(dateString?: string): string | null {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return null;
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+}
